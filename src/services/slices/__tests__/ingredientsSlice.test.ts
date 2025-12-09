@@ -1,16 +1,10 @@
 import ingredientsReducer, {
   fetchIngredients,
-  IngredientsState
+  initialState
 } from '../ingredientsSlice';
 import { TIngredient } from '@utils-types';
 
 describe('ingredientsSlice', () => {
-  const initialState: IngredientsState = {
-    items: [],
-    isLoading: false,
-    error: null
-  };
-
   const mockIngredients: TIngredient[] = [
     {
       _id: '1',
@@ -40,7 +34,7 @@ describe('ingredientsSlice', () => {
     }
   ];
 
-  describe('Начального состояния', () => {
+  describe('Начальное состояние', () => {
     it('Проверка возврата начального состояния', () => {
       const state = ingredientsReducer(undefined, { type: 'UNKNOWN' });
 
@@ -58,9 +52,8 @@ describe('ingredientsSlice', () => {
     });
 
     it('Сброс предыдущей ошибки при новом запросе', () => {
-      const stateWithError: IngredientsState = {
-        items: [],
-        isLoading: false,
+      const stateWithError = {
+        ...initialState,
         error: 'Previous error'
       };
 
@@ -74,10 +67,9 @@ describe('ingredientsSlice', () => {
 
   describe('fetchIngredients.fulfilled', () => {
     it('Сохранение ингредиентов и установка isLoading в false', () => {
-      const loadingState: IngredientsState = {
-        items: [],
-        isLoading: true,
-        error: null
+      const loadingState = {
+        ...initialState,
+        isLoading: true
       };
 
       const action = {
@@ -93,10 +85,10 @@ describe('ingredientsSlice', () => {
     });
 
     it('Замена существующих ингредиентов новыми', () => {
-      const stateWithData: IngredientsState = {
+      const stateWithData = {
+        ...initialState,
         items: [mockIngredients[0]],
-        isLoading: true,
-        error: null
+        isLoading: true
       };
 
       const newIngredients = [mockIngredients[1]];
@@ -113,10 +105,9 @@ describe('ingredientsSlice', () => {
 
   describe('fetchIngredients.rejected', () => {
     it('Сохранение ошибки и установка isLoading в false', () => {
-      const loadingState: IngredientsState = {
-        items: [],
-        isLoading: true,
-        error: null
+      const loadingState = {
+        ...initialState,
+        isLoading: true
       };
 
       const action = {
@@ -131,10 +122,10 @@ describe('ingredientsSlice', () => {
     });
 
     it('Сохранение существующих данных при ошибке', () => {
-      const stateWithData: IngredientsState = {
+      const stateWithData = {
+        ...initialState,
         items: mockIngredients,
-        isLoading: true,
-        error: null
+        isLoading: true
       };
 
       const action = {

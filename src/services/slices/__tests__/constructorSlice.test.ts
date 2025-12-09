@@ -3,7 +3,7 @@ import constructorReducer, {
   removeIngredient,
   moveIngredient,
   clearConstructor,
-  ConstructorState
+  initialState
 } from '../constructorSlice';
 import { TIngredient, TConstructorIngredient } from '@utils-types';
 
@@ -12,11 +12,6 @@ jest.mock('uuid', () => ({
 }));
 
 describe('constructorSlice', () => {
-  const initialState: ConstructorState = {
-    bun: null,
-    ingredients: []
-  };
-
   const mockBun: TIngredient = {
     _id: 'bun-1',
     name: 'Краторная булка N-200i',
@@ -60,7 +55,7 @@ describe('constructorSlice', () => {
   };
 
   describe('Начальное состояние', () => {
-    it('Проверка вовзрата начального состояния', () => {
+    it('Проверка возврата начального состояния', () => {
       const state = constructorReducer(undefined, { type: 'UNKNOWN' });
 
       expect(state).toEqual(initialState);
@@ -77,7 +72,7 @@ describe('constructorSlice', () => {
       expect(state.bun?.id).toBe('test-uuid-123');
     });
 
-    it('Замена булку при добавлении новой', () => {
+    it('Замена булки при добавлении новой', () => {
       const anotherBun: TIngredient = {
         ...mockBun,
         _id: 'bun-2',
@@ -121,8 +116,8 @@ describe('constructorSlice', () => {
 
   describe('removeIngredient', () => {
     it('Удаление ингредиента из конструктора', () => {
-      const stateWithIngredient: ConstructorState = {
-        bun: null,
+      const stateWithIngredient = {
+        ...initialState,
         ingredients: [
           { ...mockMain, id: 'ingredient-to-remove' } as TConstructorIngredient
         ]
@@ -137,8 +132,8 @@ describe('constructorSlice', () => {
     });
 
     it('Удаление только указанного ингредиента', () => {
-      const stateWithIngredients: ConstructorState = {
-        bun: null,
+      const stateWithIngredients = {
+        ...initialState,
         ingredients: [
           { ...mockMain, id: 'keep-1' } as TConstructorIngredient,
           { ...mockSauce, id: 'remove-this' } as TConstructorIngredient,
@@ -152,7 +147,9 @@ describe('constructorSlice', () => {
       );
 
       expect(state.ingredients).toHaveLength(2);
-      expect(state.ingredients.find((i) => i.id === 'remove-this')).toBeUndefined();
+      expect(
+        state.ingredients.find((i) => i.id === 'remove-this')
+      ).toBeUndefined();
       expect(state.ingredients.find((i) => i.id === 'keep-1')).toBeDefined();
       expect(state.ingredients.find((i) => i.id === 'keep-2')).toBeDefined();
     });
@@ -160,11 +157,15 @@ describe('constructorSlice', () => {
 
   describe('moveIngredient', () => {
     it('Перемещение ингредиента', () => {
-      const stateWithIngredients: ConstructorState = {
-        bun: null,
+      const stateWithIngredients = {
+        ...initialState,
         ingredients: [
           { ...mockMain, id: 'id-1', name: 'Первый' } as TConstructorIngredient,
-          { ...mockSauce, id: 'id-2', name: 'Второй' } as TConstructorIngredient,
+          {
+            ...mockSauce,
+            id: 'id-2',
+            name: 'Второй'
+          } as TConstructorIngredient,
           { ...mockMain, id: 'id-3', name: 'Третий' } as TConstructorIngredient
         ]
       };
@@ -181,8 +182,8 @@ describe('constructorSlice', () => {
   });
 
   describe('clearConstructor', () => {
-    it('Очистка конструктора', () => {
-      const stateWithData: ConstructorState = {
+    it('должен очистить конструктор', () => {
+      const stateWithData = {
         bun: { ...mockBun, id: 'bun-uuid' } as TConstructorIngredient,
         ingredients: [
           { ...mockMain, id: 'main-uuid' } as TConstructorIngredient,

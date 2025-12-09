@@ -3,19 +3,11 @@ import orderReducer, {
   fetchOrderByNumber,
   fetchUserOrders,
   clearOrderModalData,
-  OrderState
+  initialState
 } from '../orderSlice';
 import { TOrder } from '@utils-types';
 
 describe('orderSlice', () => {
-  const initialState: OrderState = {
-    orderRequest: false,
-    orderModalData: null,
-    orders: [],
-    isLoading: false,
-    error: null
-  };
-
   const mockOrder: TOrder = {
     _id: 'order-1',
     status: 'done',
@@ -49,7 +41,7 @@ describe('orderSlice', () => {
 
   describe('Синхронные экшены', () => {
     it('clearOrderModalData очищает данные модального окна заказа', () => {
-      const stateWithOrder: OrderState = {
+      const stateWithOrder = {
         ...initialState,
         orderModalData: mockOrder
       };
@@ -61,7 +53,7 @@ describe('orderSlice', () => {
   });
 
   describe('createOrder', () => {
-    it('Зending: установка orderRequest в true', () => {
+    it('Pending: установка orderRequest в true', () => {
       const action = { type: createOrder.pending.type };
       const state = orderReducer(initialState, action);
 
@@ -70,7 +62,7 @@ describe('orderSlice', () => {
     });
 
     it('Fulfilled: сохранение заказа и установка orderRequest в false', () => {
-      const loadingState: OrderState = {
+      const loadingState = {
         ...initialState,
         orderRequest: true
       };
@@ -86,7 +78,7 @@ describe('orderSlice', () => {
     });
 
     it('Rejected: сохранение ошибки и установка orderRequest в false', () => {
-      const loadingState: OrderState = {
+      const loadingState = {
         ...initialState,
         orderRequest: true
       };
@@ -112,7 +104,7 @@ describe('orderSlice', () => {
     });
 
     it('Fulfilled: сохранение заказа в orderModalData', () => {
-      const loadingState: OrderState = {
+      const loadingState = {
         ...initialState,
         isLoading: true
       };
@@ -128,7 +120,7 @@ describe('orderSlice', () => {
     });
 
     it('Rejected: сохранение ошибки', () => {
-      const loadingState: OrderState = {
+      const loadingState = {
         ...initialState,
         isLoading: true
       };
@@ -154,7 +146,7 @@ describe('orderSlice', () => {
     });
 
     it('Fulfilled: сохранение списка заказов', () => {
-      const loadingState: OrderState = {
+      const loadingState = {
         ...initialState,
         isLoading: true
       };
@@ -171,7 +163,7 @@ describe('orderSlice', () => {
     });
 
     it('Rejected: сохранение ошибки', () => {
-      const loadingState: OrderState = {
+      const loadingState = {
         ...initialState,
         isLoading: true
       };

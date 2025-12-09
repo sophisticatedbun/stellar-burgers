@@ -8,18 +8,11 @@ import userReducer, {
   updateUser,
   logoutUser,
   checkUserAuth,
-  UserState
+  initialState
 } from '../userSlice';
 import { TUser } from '@utils-types';
 
 describe('userSlice', () => {
-  const initialState: UserState = {
-    isAuthChecked: false,
-    data: null,
-    isLoading: false,
-    error: null
-  };
-
   const mockUser: TUser = {
     email: 'test@example.com',
     name: 'Test User'
@@ -47,7 +40,7 @@ describe('userSlice', () => {
     });
 
     it('clearUser очищает данные пользователя', () => {
-      const stateWithUser: UserState = {
+      const stateWithUser = {
         ...initialState,
         data: mockUser
       };
@@ -59,7 +52,7 @@ describe('userSlice', () => {
   });
 
   describe('registerUser', () => {
-    it('Pending: утсанавливает isLoading в true', () => {
+    it('Pending: устанавливает isLoading в true', () => {
       const action = { type: registerUser.pending.type };
       const state = userReducer(initialState, action);
 
@@ -68,7 +61,7 @@ describe('userSlice', () => {
     });
 
     it('Fulfilled: сохраняет пользователя и установить isLoading в false', () => {
-      const loadingState: UserState = {
+      const loadingState = {
         ...initialState,
         isLoading: true
       };
@@ -85,7 +78,7 @@ describe('userSlice', () => {
     });
 
     it('Rejected: сохраняет ошибку и устанавливает isLoading в false', () => {
-      const loadingState: UserState = {
+      const loadingState = {
         ...initialState,
         isLoading: true
       };
@@ -112,7 +105,7 @@ describe('userSlice', () => {
     });
 
     it('Fulfilled: сохраняет пользователя и устанавливает isLoading в false', () => {
-      const loadingState: UserState = {
+      const loadingState = {
         ...initialState,
         isLoading: true
       };
@@ -129,7 +122,7 @@ describe('userSlice', () => {
     });
 
     it('Rejected: сохраняет ошибку и устанавливает isLoading в false', () => {
-      const loadingState: UserState = {
+      const loadingState = {
         ...initialState,
         isLoading: true
       };
@@ -156,7 +149,7 @@ describe('userSlice', () => {
     });
 
     it('Fulfilled: сохраняет пользователя и устанавливает isLoading в false', () => {
-      const loadingState: UserState = {
+      const loadingState = {
         ...initialState,
         isLoading: true
       };
@@ -172,7 +165,7 @@ describe('userSlice', () => {
     });
 
     it('Rejected: сохраняет ошибку и устанавливает isLoading в false', () => {
-      const loadingState: UserState = {
+      const loadingState = {
         ...initialState,
         isLoading: true
       };
@@ -198,7 +191,7 @@ describe('userSlice', () => {
     });
 
     it('Fulfilled: обновляет данные пользователя', () => {
-      const stateWithUser: UserState = {
+      const stateWithUser = {
         ...initialState,
         data: mockUser,
         isLoading: true
@@ -220,7 +213,7 @@ describe('userSlice', () => {
     });
 
     it('Rejected: сохраняет ошибку', () => {
-      const loadingState: UserState = {
+      const loadingState = {
         ...initialState,
         isLoading: true
       };
@@ -238,7 +231,7 @@ describe('userSlice', () => {
 
   describe('logoutUser', () => {
     it('Pending: устанавливает isLoading в true', () => {
-      const stateWithUser: UserState = {
+      const stateWithUser = {
         ...initialState,
         data: mockUser
       };
@@ -251,7 +244,7 @@ describe('userSlice', () => {
     });
 
     it('Fulfilled: очищает данные пользователя', () => {
-      const stateWithUser: UserState = {
+      const stateWithUser = {
         ...initialState,
         data: mockUser,
         isLoading: true
@@ -265,7 +258,7 @@ describe('userSlice', () => {
     });
 
     it('Rejected: сохраняет ошибку', () => {
-      const loadingState: UserState = {
+      const loadingState = {
         ...initialState,
         data: mockUser,
         isLoading: true
@@ -292,7 +285,7 @@ describe('userSlice', () => {
     });
 
     it('Fulfilled: устанавливает данные пользователя и isAuthChecked в true', () => {
-      const loadingState: UserState = {
+      const loadingState = {
         ...initialState,
         isLoading: true
       };
@@ -309,7 +302,7 @@ describe('userSlice', () => {
     });
 
     it('Fulfilled с null: устанавливает isAuthChecked в true без пользователя', () => {
-      const loadingState: UserState = {
+      const loadingState = {
         ...initialState,
         isLoading: true
       };
@@ -326,7 +319,7 @@ describe('userSlice', () => {
     });
 
     it('Rejected: устанавливает isAuthChecked в true с ошибкой', () => {
-      const loadingState: UserState = {
+      const loadingState = {
         ...initialState,
         isLoading: true
       };

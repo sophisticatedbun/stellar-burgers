@@ -6,6 +6,11 @@ import {
   feedReducer,
   orderReducer
 } from '@slices';
+import { initialState as userInitialState } from '../slices/userSlice';
+import { initialState as ingredientsInitialState } from '../slices/ingredientsSlice';
+import { initialState as constructorInitialState } from '../slices/constructorSlice';
+import { initialState as feedInitialState } from '../slices/feedSlice';
+import { initialState as orderInitialState } from '../slices/orderSlice';
 
 describe('rootReducer', () => {
   const rootReducer = combineReducers({
@@ -30,89 +35,64 @@ describe('rootReducer', () => {
     expect(state).toHaveProperty('order');
   });
 
-  it('Проверка инициализации user слайс с начальным состоянием', () => {
+  it('Проверка инициализации user слайса с начальным состоянием', () => {
     const store = configureStore({
       reducer: rootReducer
     });
 
     const state = store.getState();
 
-    expect(state.user).toEqual({
-      isAuthChecked: false,
-      data: null,
-      isLoading: false,
-      error: null
-    });
+    expect(state.user).toEqual(userInitialState);
   });
 
-  it('Проверка инициализации ingredients слайс с начальным состоянием', () => {
+  it('Проверка инициализации ingredients слайса с начальным состоянием', () => {
     const store = configureStore({
       reducer: rootReducer
     });
 
     const state = store.getState();
 
-    expect(state.ingredients).toEqual({
-      items: [],
-      isLoading: false,
-      error: null
-    });
+    expect(state.ingredients).toEqual(ingredientsInitialState);
   });
 
-  it('Проверка инициализации burgerConstructor слайс с начальным состоянием', () => {
+  it('Проверка инициализации burgerConstructor слайса с начальным состоянием', () => {
     const store = configureStore({
       reducer: rootReducer
     });
 
     const state = store.getState();
 
-    expect(state.burgerConstructor).toEqual({
-      bun: null,
-      ingredients: []
-    });
+    expect(state.burgerConstructor).toEqual(constructorInitialState);
   });
 
-  it('Проверка инициализации feed слайс с начальным состоянием', () => {
+  it('Проверка инициализации feed слайса с начальным состоянием', () => {
     const store = configureStore({
       reducer: rootReducer
     });
 
     const state = store.getState();
 
-    expect(state.feed).toEqual({
-      orders: [],
-      total: 0,
-      totalToday: 0,
-      isLoading: false,
-      error: null
-    });
+    expect(state.feed).toEqual(feedInitialState);
   });
 
-  it('Проверка инициализации order слайс с начальным состоянием', () => {
+  it('Проверка инициализации order слайса с начальным состоянием', () => {
     const store = configureStore({
       reducer: rootReducer
     });
 
     const state = store.getState();
 
-    expect(state.order).toEqual({
-      orderRequest: false,
-      orderModalData: null,
-      orders: [],
-      isLoading: false,
-      error: null
-    });
+    expect(state.order).toEqual(orderInitialState);
   });
 
-  it('Проверка начального состояние при передаче undefined', () => {
+  it('Проверка начального состояния при передаче undefined', () => {
     const state = rootReducer(undefined, { type: 'UNKNOWN_ACTION' });
 
     expect(state).toBeDefined();
-    expect(state.user).toBeDefined();
-    expect(state.ingredients).toBeDefined();
-    expect(state.burgerConstructor).toBeDefined();
-    expect(state.feed).toBeDefined();
-    expect(state.order).toBeDefined();
+    expect(state.user).toEqual(userInitialState);
+    expect(state.ingredients).toEqual(ingredientsInitialState);
+    expect(state.burgerConstructor).toEqual(constructorInitialState);
+    expect(state.feed).toEqual(feedInitialState);
+    expect(state.order).toEqual(orderInitialState);
   });
 });
-

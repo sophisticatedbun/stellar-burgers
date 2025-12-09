@@ -1,15 +1,7 @@
-import feedReducer, { fetchFeed, FeedState } from '../feedSlice';
+import feedReducer, { fetchFeed, initialState } from '../feedSlice';
 import { TOrder } from '@utils-types';
 
 describe('feedSlice', () => {
-  const initialState: FeedState = {
-    orders: [],
-    total: 0,
-    totalToday: 0,
-    isLoading: false,
-    error: null
-  };
-
   const mockOrders: TOrder[] = [
     {
       _id: 'order-1',
@@ -37,7 +29,7 @@ describe('feedSlice', () => {
     totalToday: 150
   };
 
-  describe('Начальное состояние', () => {
+  describe('начальное состояние', () => {
     it('Проверка возврата начального состояния', () => {
       const state = feedReducer(undefined, { type: 'UNKNOWN' });
 
@@ -55,7 +47,7 @@ describe('feedSlice', () => {
     });
 
     it('Сброс предыдущей ошибки при новом запросе', () => {
-      const stateWithError: FeedState = {
+      const stateWithError = {
         ...initialState,
         error: 'Previous error'
       };
@@ -70,7 +62,7 @@ describe('feedSlice', () => {
 
   describe('fetchFeed.fulfilled', () => {
     it('Сохранение заказов и установка isLoading в false', () => {
-      const loadingState: FeedState = {
+      const loadingState = {
         ...initialState,
         isLoading: true
       };
@@ -89,12 +81,12 @@ describe('feedSlice', () => {
     });
 
     it('Замена существующего заказа новыми', () => {
-      const stateWithData: FeedState = {
+      const stateWithData = {
+        ...initialState,
         orders: [mockOrders[0]],
         total: 10000,
         totalToday: 50,
-        isLoading: true,
-        error: null
+        isLoading: true
       };
 
       const action = {
@@ -112,7 +104,7 @@ describe('feedSlice', () => {
 
   describe('fetchFeed.rejected', () => {
     it('Сохранение ошибки и установка isLoading в false', () => {
-      const loadingState: FeedState = {
+      const loadingState = {
         ...initialState,
         isLoading: true
       };
@@ -128,12 +120,12 @@ describe('feedSlice', () => {
     });
 
     it('Сохранение существующих данных при ошибке', () => {
-      const stateWithData: FeedState = {
+      const stateWithData = {
+        ...initialState,
         orders: mockOrders,
         total: 50000,
         totalToday: 150,
-        isLoading: true,
-        error: null
+        isLoading: true
       };
 
       const action = {
