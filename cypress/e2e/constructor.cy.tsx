@@ -1,18 +1,25 @@
-
 const selectors = {
-  modal: '[class*="modal"]',
-  overlay: '[class*="overlay"]',
-  constructor: '[class*="burger_constructor"]',
-  modalCloseButton: '[class*="modal"] button'
+  modal: '[data-testid="modal"]',
+  overlay: '[data-testid="modal-overlay"]',
+  constructor: '[data-testid="burger-constructor"]',
+  modalCloseButton: '[data-testid="modal-close"]'
+};
+
+const testData = {
+  bun: 'Краторная булка N-200i',
+  bunTop: 'Краторная булка N-200i (верх)',
+  bunBottom: 'Краторная булка N-200i (низ)',
+  main: 'Биокотлета из марсианской Магнолии',
+  addButton: 'Добавить'
 };
 
 describe('Страница конструктора бургера', () => {
   beforeEach(() => {
-    cy.intercept('GET', 'api/ingredients', {
+    cy.intercept('GET', '**/api/ingredients', {
       fixture: 'ingredients.json'
     }).as('getIngredients');
 
-    cy.intercept('GET', 'api/auth/user', {
+    cy.intercept('GET', '**/api/auth/user', {
       fixture: 'user.json'
     }).as('getUser');
 
@@ -35,36 +42,30 @@ describe('Страница конструктора бургера', () => {
     it('Добавление булки в конструктор', () => {
       cy.contains('Выберите булки').should('exist');
 
-      cy.contains('li', 'Краторная булка N-200i')
+      cy.contains('li', testData.bun)
         .find('button')
-        .contains('Добавить')
+        .contains(testData.addButton)
         .click();
 
-      cy.get(selectors.constructor)
-        .contains('Краторная булка N-200i (верх)')
-        .should('exist');
-      cy.get(selectors.constructor)
-        .contains('Краторная булка N-200i (низ)')
-        .should('exist');
+      cy.get(selectors.constructor).contains(testData.bunTop).should('exist');
+      cy.get(selectors.constructor).contains(testData.bunBottom).should('exist');
     });
 
     it('Добавление начинки в конструктор', () => {
       cy.contains('Выберите начинку').should('exist');
 
-      cy.contains('li', 'Биокотлета из марсианской Магнолии')
+      cy.contains('li', testData.main)
         .find('button')
-        .contains('Добавить')
+        .contains(testData.addButton)
         .click();
 
-      cy.get(selectors.constructor)
-        .contains('Биокотлета из марсианской Магнолии')
-        .should('exist');
+      cy.get(selectors.constructor).contains(testData.main).should('exist');
     });
 
     it('Добавление соуса в конструктор', () => {
       cy.contains('li', 'Соус Spicy-X')
         .find('button')
-        .contains('Добавить')
+        .contains(testData.addButton)
         .click();
 
       cy.get(selectors.constructor).contains('Соус Spicy-X').should('exist');
@@ -73,14 +74,14 @@ describe('Страница конструктора бургера', () => {
 
   describe('Модальное окно ингредиента', () => {
     it('Открытие модального окна при клике на ингредиент', () => {
-      cy.contains('li', 'Краторная булка N-200i').find('a').click();
+      cy.contains('li', testData.bun).find('a').click();
 
       cy.get(selectors.modal).should('exist');
       cy.contains('Детали ингредиента').should('exist');
     });
 
     it('Закрытие модального окна по клику на крестик', () => {
-      cy.contains('li', 'Краторная булка N-200i').find('a').click();
+      cy.contains('li', testData.bun).find('a').click();
       cy.get(selectors.modal).should('exist');
 
       cy.get(selectors.modalCloseButton).click();
@@ -88,7 +89,7 @@ describe('Страница конструктора бургера', () => {
     });
 
     it('Закрытие модального окна по клику на оверлей', () => {
-      cy.contains('li', 'Биокотлета из марсианской Магнолии').find('a').click();
+      cy.contains('li', testData.main).find('a').click();
       cy.get(selectors.modal).should('exist');
 
       cy.get(selectors.overlay).click({ force: true });
@@ -98,28 +99,24 @@ describe('Страница конструктора бургера', () => {
 
   describe('Создание заказа', () => {
     beforeEach(() => {
-      cy.intercept('POST', 'api/orders', {
+      cy.intercept('POST', '**/api/orders', {
         fixture: 'order.json'
       }).as('createOrder');
     });
 
     it('Создание заказа и отображение номера в модальном окне', () => {
-      cy.contains('li', 'Краторная булка N-200i')
+      cy.contains('li', testData.bun)
         .find('button')
-        .contains('Добавить')
+        .contains(testData.addButton)
         .click();
 
-      cy.contains('li', 'Биокотлета из марсианской Магнолии')
+      cy.contains('li', testData.main)
         .find('button')
-        .contains('Добавить')
+        .contains(testData.addButton)
         .click();
 
-      cy.get(selectors.constructor)
-        .contains('Краторная булка N-200i (верх)')
-        .should('exist');
-      cy.get(selectors.constructor)
-        .contains('Биокотлета из марсианской Магнолии')
-        .should('exist');
+      cy.get(selectors.constructor).contains(testData.bunTop).should('exist');
+      cy.get(selectors.constructor).contains(testData.main).should('exist');
 
       cy.contains('button', 'Оформить заказ').click();
       cy.wait('@createOrder');
@@ -132,22 +129,18 @@ describe('Страница конструктора бургера', () => {
     });
 
     it('Закрытие модального окна заказа и очистка конструктора', () => {
-      cy.contains('li', 'Краторная булка N-200i')
+      cy.contains('li', testData.bun)
         .find('button')
-        .contains('Добавить')
+        .contains(testData.addButton)
         .click();
 
-      cy.contains('li', 'Биокотлета из марсианской Магнолии')
+      cy.contains('li', testData.main)
         .find('button')
-        .contains('Добавить')
+        .contains(testData.addButton)
         .click();
 
-      cy.get(selectors.constructor)
-        .contains('Краторная булка N-200i (верх)')
-        .should('exist');
-      cy.get(selectors.constructor)
-        .contains('Биокотлета из марсианской Магнолии')
-        .should('exist');
+      cy.get(selectors.constructor).contains(testData.bunTop).should('exist');
+      cy.get(selectors.constructor).contains(testData.main).should('exist');
 
       cy.contains('button', 'Оформить заказ').click();
       cy.wait('@createOrder');
